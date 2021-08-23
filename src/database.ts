@@ -31,7 +31,7 @@ export class Book {
 
     @t.maxLength(1024 * 4) description: string = '';
 
-    @t price: number = 0;
+    @t.positive().maximum(1000) price: number = 0;
     @t.maxLength(64) isbn: string = '';
 
     constructor(

@@ -10,8 +10,8 @@ import faker from 'faker';
 import { Logger } from '@deepkit/logger';
 
 /**
- * This app uses /tmp/app.sqlite as database, so its is reset after each restart (which happens regular on heroku free apps).
- * We add new authors/books on boostrap
+ * This app uses /tmp/app.sqlite as database, so it is reset after each restart (which happens regularly on heroku free apps).
+ * We add new authors/books on boostrap using a faker library.
  */
 @injectable()
 class Boostrap {
@@ -68,7 +68,7 @@ Application.create({
         # Bookstore Example API
         
         This is an example project demonstrating [Deepkit API Console](https://deepkit.io/framework). It's a simple Deepkit Framework application
-        with the Deepit API module and AutoCrud loaded. There are [two entities](https://github.com/marcj/deepkit-bookstore/blob/master/src/database.ts): 
+        with the Deepkit API module and AutoCrud loaded. There are [two entities](https://github.com/marcj/deepkit-bookstore/blob/master/src/database.ts): 
         Author and Book, which you can both manipulate via the JSON REST API directly in this application. Just open a route and click "Open console".
         
         The code is hosted at [github.com/marcj/deepkit-bookstore](https://github.com/marcj/deepkit-bookstore).
