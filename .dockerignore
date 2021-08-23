@@ -1,0 +1,6 @@
+node_modules
+Dockerfile
+.dockerignore
+heroku.yml
+README
+deploy.sh

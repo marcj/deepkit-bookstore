@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "target": "es2018",
+    "module": "CommonJS",
+    "preserveSymlinks": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@deepkit/template"
+  },
+  "includes": [
+    "*.ts",
+    "*.tsx"
+  ]
+}
