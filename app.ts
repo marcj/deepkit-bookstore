@@ -7,6 +7,7 @@ import { config } from './src/config';
 import { injectable } from '@deepkit/injector';
 import { eventDispatcher } from '@deepkit/event';
 import faker from 'faker';
+import { Logger } from '@deepkit/logger';
 
 /**
  * This app uses /tmp/app.sqlite as database, so its is reset after each restart (which happens regular on heroku free apps).
@@ -14,8 +15,9 @@ import faker from 'faker';
  */
 @injectable()
 class Boostrap {
-    constructor(private database: SQLiteDatabase) {
+    constructor(private database: SQLiteDatabase, private logger: Logger) {
     }
+
     @eventDispatcher.listen(onServerMainBootstrapDone)
     async onMainBoostrap() {
         await this.database.query(Author).deleteMany();
@@ -25,10 +27,10 @@ class Boostrap {
         const session = this.database.createSession();
 
         for (let i = 0; i < 100; i++) {
-            let username = ''
+            let username = '';
             do {
                 username = faker.internet.userName();
-            } while(authors.find(v => v.username === username));
+            } while (authors.find(v => v.username === username));
 
             const author = new Author(username);
             author.firstName = faker.name.firstName();
@@ -49,6 +51,8 @@ class Boostrap {
         }
 
         await session.commit();
+
+        this.logger.log('Bookstore database filled with data. Open https://127.0.0.1/api to visit the API.');
     }
 }
 
@@ -59,7 +63,21 @@ Application.create({
     imports: [
         createCrudRoutes([Author], { identifier: 'username', identifierChangeable: true }),
         createCrudRoutes([Book], {}),
-        ApiConsoleModule.configure({ basePath: '/api' }),
+        ApiConsoleModule.configure({
+            basePath: '/api', markdown: `
+        # Bookstore Example API
+        
+        This is an example project demonstrating [Deepkit API Console](https://deepkit.io/framework). It's a simple Deepkit Framework application
+        with the Deepit API module and AutoCrud loaded. There are [two entities](https://github.com/marcj/deepkit-bookstore/blob/master/src/database.ts): 
+        Author and Book, which you can both manipulate via the JSON REST API directly in this application. Just open a route and click "Open console".
+        
+        The code is hosted at [github.com/marcj/deepkit-bookstore](https://github.com/marcj/deepkit-bookstore).
+        
+        Click on a route and press "Open console" to execute a HTTP call right in your browser.
+        
+        Have fun!
+        `
+        }),
         KernelModule.configure({
             migrateOnStartup: true
         }),
