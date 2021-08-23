@@ -11,15 +11,15 @@ export class Author {
     @t.primary.autoIncrement id: number = 0;
     @t created: Date = new Date;
 
-    @t.maximum(100).pattern(EMAIL_REGEX) email?: string;
+    @t.maxLength(100).pattern(EMAIL_REGEX) email?: string;
 
-    @t.maximum(100) firstName?: string;
-    @t.maximum(100) lastName?: string;
+    @t.maxLength(100) firstName?: string;
+    @t.maxLength(100) lastName?: string;
 
     @t birthDate?: Date;
 
     constructor(
-        @t.minLength(3).maximum(24).index({ unique: true }) public username: string
+        @t.minLength(3).maxLength(24).index({ unique: true }) public username: string
     ) {
     }
 }
@@ -29,14 +29,14 @@ export class Book {
     @t.primary.autoIncrement id: number = 0;
     @t created: Date = new Date;
 
-    @t.maximum(1024 * 4) description: string = '';
+    @t.maxLength(1024 * 4) description: string = '';
 
     @t price: number = 0;
-    @t.maximum(64) isbn: string = '';
+    @t.maxLength(64) isbn: string = '';
 
     constructor(
         @t.reference() public author: Author,
-        @t.maximum(128).minLength(3) public title: string,
+        @t.maxLength(128).minLength(3) public title: string,
     ) {
     }
 }
