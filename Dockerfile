@@ -20,7 +20,6 @@ WORKDIR /app
 
 COPY --from=0 /app /app
 
-ENV APP_KERNEL_HOST=0.0.0.0
 EXPOSE 8080
 
-CMD APP_KERNEL_PORT=$PORT node dist/app.js server:start
+CMD APP_FRAMEWORK_PORT=$PORT node dist/app.js server:start
