@@ -1,6 +1,7 @@
 #!/usr/bin/env ts-node-script
 import 'reflect-metadata';
-import { Application, createCrudRoutes, KernelModule, onServerMainBootstrapDone } from '@deepkit/framework';
+import { App } from '@deepkit/app';
+import { createCrudRoutes, FrameworkModule, onServerMainBootstrapDone } from '@deepkit/framework';
 import { Author, Book, SQLiteDatabase } from './src/database';
 import { ApiConsoleModule } from '@deepkit/api-console-module';
 import { config } from './src/config';
@@ -8,12 +9,13 @@ import { injectable } from '@deepkit/injector';
 import { eventDispatcher } from '@deepkit/event';
 import faker from 'faker';
 import { Logger } from '@deepkit/logger';
+import { MainController } from './src/main.controller';
 
 /**
  * This app uses /tmp/app.sqlite as database, so it is reset after each restart (which happens regularly on heroku free apps).
  * We add new authors/books on boostrap using a faker library.
  */
-@injectable()
+@injectable
 class Boostrap {
     constructor(private database: SQLiteDatabase, private logger: Logger) {
     }
@@ -56,15 +58,17 @@ class Boostrap {
     }
 }
 
-Application.create({
+new App({
     config,
+    controllers: [MainController],
     providers: [SQLiteDatabase],
     listeners: [Boostrap],
     imports: [
         createCrudRoutes([Author], { identifier: 'username', identifierChangeable: true }),
         createCrudRoutes([Book], {}),
-        ApiConsoleModule.configure({
-            basePath: '/api', markdown: `
+        new ApiConsoleModule({
+            path: '/api',
+            markdown: `
         # Bookstore Example API
         
         This is an example project demonstrating [Deepkit API Console](https://deepkit.io/framework). It's a simple Deepkit Framework application
@@ -78,8 +82,9 @@ Application.create({
         Have fun!
         `
         }),
-        KernelModule.configure({
-            migrateOnStartup: true
+        new FrameworkModule({
+            migrateOnStartup: true,
+            debug: true,
         }),
     ]
 })
