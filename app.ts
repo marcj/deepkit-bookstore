@@ -10,6 +10,7 @@ import { eventDispatcher } from '@deepkit/event';
 import faker from 'faker';
 import { Logger } from '@deepkit/logger';
 import { MainController } from './src/main.controller';
+import { RpcController } from './src/rpc.controller';
 
 /**
  * This app uses /tmp/app.sqlite as database, so it is reset after each restart (which happens regularly on heroku free apps).
@@ -60,7 +61,7 @@ class Boostrap {
 
 new App({
     config,
-    controllers: [MainController],
+    controllers: [MainController, RpcController],
     providers: [SQLiteDatabase],
     listeners: [Boostrap],
     imports: [
