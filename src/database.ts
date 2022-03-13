@@ -1,52 +1,60 @@
-import { entity, t } from '@deepkit/type';
+import {
+    AutoIncrement,
+    entity,
+    Maximum,
+    MaxLength,
+    MinLength,
+    Pattern,
+    Positive,
+    PrimaryKey,
+    Reference,
+    t,
+    Unique
+} from '@deepkit/type';
 import { Database } from '@deepkit/orm';
 import { SQLiteDatabaseAdapter } from '@deepkit/sqlite';
-import { config } from './config';
-import { injectable } from '@deepkit/injector';
+import { Config } from './config';
 
 const EMAIL_REGEX = /^\S+@\S+$/;
 
 @entity.name('author')
 export class Author {
-    @t.primary.autoIncrement id: number = 0;
-    @t created: Date = new Date;
+    id: number & PrimaryKey & AutoIncrement = 0;
+    created: Date = new Date;
 
-    @t.maxLength(100).pattern(EMAIL_REGEX) email?: string;
+    email?: string & MaxLength<100> & Pattern<typeof EMAIL_REGEX>;
 
-    @t.maxLength(100) firstName?: string;
-    @t.maxLength(100) lastName?: string;
+    firstName?: string & MaxLength<100>;
+    lastName?: string & MaxLength<100>;
 
-    @t birthDate?: Date;
+    birthDate?: Date;
 
     constructor(
-        @t.minLength(3).maxLength(24).index({ unique: true }) public username: string
+        public username: string & MaxLength<100> & Unique
     ) {
     }
 }
 
 @entity.name('book')
 export class Book {
-    @t.primary.autoIncrement id: number = 0;
-    @t created: Date = new Date;
+    id: number & PrimaryKey & AutoIncrement = 0;
+    created: Date = new Date;
 
-    @t.maxLength(1024 * 4) description: string = '';
+    description: string & MaxLength<4096> = '';
 
-    @t.positive().maximum(1000) price: number = 0;
-    @t.maxLength(64) isbn: string = '';
+    price: number & Positive & Maximum<1000> = 0;
+    isbn: string & MaxLength<64> = '';
 
     constructor(
-        @t.reference() public author: Author,
-        @t.maxLength(128).minLength(3) public title: string,
+        public author: Author & Reference,
+        public title: string & MinLength<3> & MaxLength<128>,
     ) {
     }
 }
 
-class DbConfig extends config.slice('dbPath') {
-}
 
-@injectable
 export class SQLiteDatabase extends Database {
-    constructor(private config: DbConfig) {
-        super(new SQLiteDatabaseAdapter(config.dbPath), [Author, Book]);
+    constructor(dbPath: Config['dbPath']) {
+        super(new SQLiteDatabaseAdapter(dbPath), [Author, Book]);
     }
 }

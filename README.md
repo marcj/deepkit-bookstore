@@ -13,4 +13,18 @@ npm run start
 ```
 
 
-Then open https://127.0.0.1/api
+Then open one of:
+
+- https://127.0.0.1:8080/
+- https://127.0.0.1:8080/api
+- https://127.0.0.1:8080/_debug/
+
+### Docker build
+
+```
+docker build -t deepkit-bookstore .
+
+docker run --rm -p 8080:8080 -e PORT=8080 deepkit-bookstore
+```
+
+then open https://127.0.0.1:8080/

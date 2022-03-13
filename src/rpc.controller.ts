@@ -1,13 +1,12 @@
 import { rpc } from '@deepkit/rpc';
-import { t } from '@deepkit/type';
 import { Subject } from 'rxjs';
 
 class ChatMessage {
-    @t created: Date = new Date;
+    created: Date = new Date;
 
     constructor(
-        @t public sender: string,
-        @t public message: string,
+        public sender: string,
+        public message: string,
     ) {
     }
 }
@@ -21,7 +20,6 @@ export class RpcController {
     }
 
     @rpc.action()
-    @t.generic(ChatMessage)
     chatWatch(): Subject<ChatMessage> {
         //we create a new subject and redirect to not close the original subject
         const subject = new Subject<ChatMessage>();
@@ -36,7 +34,6 @@ export class RpcController {
     }
 
     @rpc.action().description('Emits for 10 seconds the current time each second, then closes the subject')
-    @t.generic(Date)
     timesSubject(): Subject<Date> {
         const subject = new Subject<Date>();
 

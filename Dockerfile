@@ -1,7 +1,6 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
-RUN apk --no-cache add g++ gcc git libgcc libstdc++ linux-headers make python3 libexecinfo-dev
-RUN npm install -g npm@6
+RUN apk --no-cache add openssh g++ gcc git libgcc libstdc++ linux-headers make python3 libexecinfo-dev
 
 WORKDIR /app
 
@@ -14,7 +13,7 @@ ADD . /app
 
 RUN ./node_modules/.bin/tsc
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
