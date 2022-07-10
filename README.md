@@ -8,7 +8,7 @@ so it might be a bit slow and takes a while on first request.
 ### Install
 
 ```
-npm i
+npm install
 npm run start
 ```
 

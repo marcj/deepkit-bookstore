@@ -5,17 +5,18 @@ import { Author, Book, SQLiteDatabase } from './src/database';
 import { ApiConsoleModule } from '@deepkit/api-console-module';
 import { eventDispatcher } from '@deepkit/event';
 import faker from 'faker';
-import { Logger } from '@deepkit/logger';
+import { LoggerInterface } from '@deepkit/logger';
 import { MainController } from './src/main.controller';
 import { RpcController } from './src/rpc.controller';
 import { Config } from './src/config';
+
 
 /**
  * This app uses /tmp/app.sqlite as database, so it is reset after each restart (which happens regularly on heroku free apps).
  * We add new authors/books on boostrap using a faker library.
  */
 class Boostrap {
-    constructor(private database: SQLiteDatabase, private logger: Logger) {
+    constructor(private database: SQLiteDatabase, private logger: LoggerInterface) {
     }
 
     @eventDispatcher.listen(onServerMainBootstrapDone)
@@ -83,6 +84,7 @@ new App({
         new FrameworkModule({
             migrateOnStartup: true,
             debug: true,
+            debugBrokerHost: '127.0.0.1:9882'
         }),
     ]
 })
